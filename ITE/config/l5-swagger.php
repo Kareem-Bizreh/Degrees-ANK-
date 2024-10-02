@@ -86,7 +86,7 @@ return [
             /*
              * Edit to set the api's base path
              */
-            'base' => env('L5_SWAGGER_BASE_PATH', null),
+            'base' => '/api',
 
             /*
              * Edit to set path where swagger ui assets should be stored
@@ -108,8 +108,8 @@ return [
              * @link https://zircote.github.io/swagger-php/reference/processors.html
              */
             'default_processors_configuration' => [
-            /** Example */
-            /**
+                /** Example */
+                /**
              * 'operationId.hash' => true,
              * 'pathFilter' => [
              * 'tags' => [
@@ -170,6 +170,13 @@ return [
         */
         'securityDefinitions' => [
             'securitySchemes' => [
+                'bearer' => [
+                    'type' => 'http',
+                    'scheme' => 'bearer',
+                    'in' => 'header',
+                    'name' => 'Authorization',
+                    'description' => 'Enter your Bearer token in the format `YOUR_TOKEN`. For example: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`',
+                ],
                 /*
                  * Examples of Security schemes
                  */
@@ -228,8 +235,7 @@ return [
                     ],
 
                     'passport' => []
-                    */
-                ],
+                    */],
             ],
         ],
 

@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\AcademicYear;
-use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('GBAs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class);
+            $table->foreignIdFor(User::class, 'student_id');
             $table->enum('academic_year', [
                 AcademicYear::FirstYear->value,
                 AcademicYear::SecondYear->value,
