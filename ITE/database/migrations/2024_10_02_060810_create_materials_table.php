@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\AcademicYear;
+use App\Enums\Specialization;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +22,14 @@ return new class extends Migration
                 AcademicYear::ThirdYear->value,
                 AcademicYear::FourthYear->value,
                 AcademicYear::FifthYear->value
+            ]);
+            $table->enum('specialization', [
+                Specialization::CommonForAll->value,
+                Specialization::CommonForSwAndAi->value,
+                Specialization::CommonForSwAndCs->value,
+                Specialization::SoftwareEngineeringAndInformationSystems->value,
+                Specialization::ArtificialIntelligence->value,
+                Specialization::ComputerSystemsAndNetworks->value
             ]);
             $table->timestamps();
         });

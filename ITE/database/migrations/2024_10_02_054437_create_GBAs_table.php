@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('GBAs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'student_id');
+            $table->foreignIdFor(User::class, 'student_id')->constrained('users')->cascadeOnDelete();
             $table->enum('academic_year', [
                 AcademicYear::FirstYear->value,
                 AcademicYear::SecondYear->value,

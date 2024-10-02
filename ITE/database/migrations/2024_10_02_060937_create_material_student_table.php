@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('material_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'student_id')->constrained('users')->cascadeOnDelete();
             $table->foreignIdFor(Material::class)->constrained()->cascadeOnDelete();
             $table->integer('degree');
             $table->timestamps();
