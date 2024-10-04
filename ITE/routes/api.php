@@ -12,6 +12,8 @@ Route::group(['prefix' => 'users'], function () {
 
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
+    Route::put('/setPassword', [UserController::class, 'setPassword']);
+
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/logout', [UserController::class, 'logout']);

@@ -192,6 +192,67 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
+     *     path="/users/setPassword",
+     *     summary="set new password",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "password" , "password_confirmation"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 example="Harry Potter"
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 example="password123"
+     *             ),
+     *             @OA\Property(
+     *                 property="password_confirmation",
+     *                 type="string",
+     *                 example="password123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *      response=200, description="Successfully set of password",
+     *       @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="new password set"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid request")
+     * )
+     */
+    public function setPassword(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'password' => 'required|string|min:8|confirmed',
+            'name' => 'required|string|max:20'
+        ]);
+
+        if ($data->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $data->errors(),
+            ], 400);
+        }
+        $data = $data->validated();
+
+        $this->userService->changeUserPassword($this->userService->findByName($data['name'])->id, $data['password']);
+
+        return response()->json([
+            'message' => 'new password set'
+        ], 200);
+    }
+
+    /**
+     * @OA\Put(
      *     path="/users/resetPassword",
      *     summary="reset password",
      *     tags={"Users"},
