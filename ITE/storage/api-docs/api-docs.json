@@ -176,6 +176,165 @@
                     }
                 ]
             }
+        },
+        "/users/resetPassword": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "reset password",
+                "operationId": "42de47313002e71652fb55c0f1616d5e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "old_password",
+                                    "new_password",
+                                    "new_password_confirmation"
+                                ],
+                                "properties": {
+                                    "old_password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    },
+                                    "new_password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "new_password_confirmation": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully set of password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "new password set"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/users/editUser": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "edit users",
+                "operationId": "cd188f8fc4d42354d95133ca32448619",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "first_name",
+                                    "last_name",
+                                    "specialization"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Ron Weasly"
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Ron"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Weasly"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "example": "ذكاء صنعي"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully edit the user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "updated done"
+                                        },
+                                        "user": {
+                                            "type": "string",
+                                            "example": "[]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/users/showUser": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "show user information",
+                "operationId": "d1a15178b0ade8cbcac106e1c825fc2a",
+                "responses": {
+                    "200": {
+                        "description": "return the user"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
         }
     },
     "tags": [

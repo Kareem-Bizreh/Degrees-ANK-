@@ -2,6 +2,7 @@
 
 namespace App\Services\Classes;
 
+use App\Enums\Specialization;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -55,6 +56,7 @@ class UserService implements UserServiceInterface
         $user->last_name = $data['last_name'];
         $user->entry_year = $data['entry_year'];
         $user->password = bcrypt($data['password']);
+        $user->specialization = Specialization::CommonForAll->value;
         $user->save();
         return $user;
     }

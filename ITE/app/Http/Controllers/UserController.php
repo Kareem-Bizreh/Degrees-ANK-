@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Specialization;
 use App\Services\Classes\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * @OA\Info(title="My First API", version="0.1")
@@ -186,5 +188,172 @@ class UserController extends Controller
         return response()->json([
             'message' => 'user has been logout successfuly'
         ], 200);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/users/resetPassword",
+     *     summary="reset password",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"old_password", "new_password" , "new_password_confirmation"},
+     *             @OA\Property(
+     *                 property="old_password",
+     *                 type="string",
+     *                 example="password"
+     *             ),
+     *             @OA\Property(
+     *                 property="new_password",
+     *                 type="string",
+     *                 example="password123"
+     *             ),
+     *             @OA\Property(
+     *                 property="new_password_confirmation",
+     *                 type="string",
+     *                 example="password123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *      response=200, description="Successfully set of password",
+     *       @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="new password set"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid request"),
+     *     security={
+     *         {"bearer": {}}
+     *     }
+     * )
+     */
+    public function resetPassword(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'old_password' => 'required|string|min:8',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($data->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $data->errors(),
+            ], 400);
+        }
+        $data = $data->validated();
+
+        $user = $this->userService->findById(Auth::id());
+
+        if (! Hash::check($data['old_password'], $user->password)) {
+            return response()->json([
+                'message' => 'the password is not correct',
+            ], 400);
+        }
+
+        $this->userService->changeUserPassword($user->id, $data['new_password']);
+
+        return response()->json([
+            'message' => 'new password set'
+        ], 200);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/users/editUser",
+     *     summary="edit users",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "first_name" , "last_name" , "specialization"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 example="Ron Weasly"
+     *             ),
+     *             @OA\Property(
+     *                 property="first_name",
+     *                 type="string",
+     *                 example="Ron"
+     *             ),
+     *             @OA\Property(
+     *                 property="last_name",
+     *                 type="string",
+     *                 example="Weasly"
+     *             ),
+     *             @OA\Property(
+     *                 property="specialization",
+     *                 type="string",
+     *                 example="ذكاء صنعي"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *      response=200, description="Successfully edit the user",
+     *       @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="updated done"
+     *             ),
+     *             @OA\Property(
+     *                 property="user",
+     *                 type="string",
+     *                 example="[]"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid request"),
+     *     security={
+     *         {"bearer": {}}
+     *     }
+     * )
+     */
+    public function edit(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'name' => 'required|string|max:20',
+            'first_name' => 'required|string|max:20',
+            'last_name' => 'required|string|max:20',
+            'specialization' => ['required', new Enum(Specialization::class)]
+        ]);
+
+        if ($data->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $data->errors(),
+            ], 400);
+        }
+        $data = $data->validated();
+
+        $user = $this->userService->updateUser(Auth::id(), $data);
+
+        return response()->json([
+            'message' => 'updated done',
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/users/showUser",
+     *     summary="show user information",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *      response=200, description="return the user"),
+     *     @OA\Response(response=400, description="Invalid request"),
+     *     security={
+     *         {"bearer": {}}
+     *     }
+     * )
+     */
+    public function show()
+    {
+        return response()->json(Auth::user());
     }
 }

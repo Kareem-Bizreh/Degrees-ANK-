@@ -15,5 +15,8 @@ Route::group(['prefix' => 'users'], function () {
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/logout', [UserController::class, 'logout']);
+        Route::put('/resetPassword', [UserController::class, 'resetPassword']);
+        Route::put('/editUser', [UserController::class, 'edit']);
+        Route::get('/showUser', [UserController::class, 'show']);
     });
 });
