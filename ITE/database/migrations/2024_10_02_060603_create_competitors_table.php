@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('competitors', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'strudent_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'student_id')->constrained('users')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'friend_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });

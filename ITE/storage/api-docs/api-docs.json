@@ -10,6 +10,114 @@
         }
     ],
     "paths": {
+        "/competitors/addCompetitor": {
+            "post": {
+                "tags": [
+                    "Competitors"
+                ],
+                "summary": "add new competitor",
+                "operationId": "af7c1a59d3d152a2e7e5ede5629482cc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "friend_name"
+                                ],
+                                "properties": {
+                                    "friend_name": {
+                                        "type": "string",
+                                        "example": "Ron Weasly"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "competitor added seccessfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/competitors/deleteCompetitor": {
+            "delete": {
+                "tags": [
+                    "Competitors"
+                ],
+                "summary": "delete existing competitor",
+                "operationId": "c04728ed5c918676a742ed9177287f1d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "friend_name"
+                                ],
+                                "properties": {
+                                    "friend_name": {
+                                        "type": "string",
+                                        "example": "Ron Weasly"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "competitor deleted seccessfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/users/register": {
             "post": {
                 "tags": [
@@ -397,6 +505,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Competitors",
+            "description": "Competitors"
+        },
         {
             "name": "Users",
             "description": "Users"

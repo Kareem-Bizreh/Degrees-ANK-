@@ -23,7 +23,7 @@ return new class extends Migration
                 AcademicYear::FourthYear->value,
                 AcademicYear::FifthYear->value
             ]);
-            $table->date('year');
+            $table->string('year');
             $table->integer('average');
             $table->timestamps();
         });
