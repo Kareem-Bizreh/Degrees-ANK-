@@ -19,12 +19,6 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->string('password');
             $table->string('entry_year');
-            $table->enum('specialization', [
-                Specialization::CommonForAll->value,
-                Specialization::SoftwareEngineeringAndInformationSystems->value,
-                Specialization::ArtificialIntelligence->value,
-                Specialization::ComputerSystemsAndNetworks->value
-            ]);
             $table->rememberToken();
             $table->timestamps();
         });

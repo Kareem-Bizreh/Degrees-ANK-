@@ -6,6 +6,7 @@ use App\Enums\Specialization;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class UserService implements UserServiceInterface
@@ -58,6 +59,10 @@ class UserService implements UserServiceInterface
         $user->password = bcrypt($data['password']);
         $user->specialization = Specialization::CommonForAll->value;
         $user->save();
+        DB::table('competitors')->insert([
+            'student_id' => $user->id,
+            'friend_id' => $user->id
+        ]);
         return $user;
     }
 

@@ -19,6 +19,7 @@ interface CompetitorServiceInterface
      * @return bool
      */
     function deleteCompetitor(string $name);
+
     /**
      * get my friend in descending order
      *

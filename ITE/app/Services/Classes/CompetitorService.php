@@ -67,11 +67,12 @@ class CompetitorService implements CompetitorServiceInterface
     function getCompetitors(string $academic_year)
     {
         return DB::table('competitors')
-            ->join('GBAs', 'GBAs.student_id', '=', 'competitors.friend_id') // Join with the GBAs table
-            ->where('competitors.student_id', '=', Auth::id()) // Fetch friends of the current user
-            ->where('GBAs.academic_year', $academic_year) // Filter by academic year
-            ->orderBy('GBAs.average', 'DESC') // Order by the average in descending order
-            ->select('competitors.*', 'GBAs.average') // Select the relevant fields
-            ->get(); // Execute the query and return the result
+            ->join('GBAs', 'GBAs.student_id', '=', 'competitors.friend_id')
+            ->join('users', 'users.id', '=', 'competitors.friend_id')
+            ->where('competitors.student_id', '=', Auth::id())
+            ->where('GBAs.academic_year', $academic_year)
+            ->orderBy('GBAs.average', 'DESC')
+            ->select('competitors.*', 'GBAs.average', 'users.name as friend_name')
+            ->paginate(10);
     }
 }

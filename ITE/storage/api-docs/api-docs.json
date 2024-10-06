@@ -64,6 +64,61 @@
                 ]
             }
         },
+        "/competitors/getCompetitors/{academic_year}": {
+            "get": {
+                "tags": [
+                    "Competitors"
+                ],
+                "summary": "get competitors order by GBAs in some year",
+                "operationId": "382a4fe804c3bad5792746803b9c178e",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful get competitors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "competitors": {
+                                            "type": "string",
+                                            "example": "[]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/competitors/deleteCompetitor": {
             "delete": {
                 "tags": [

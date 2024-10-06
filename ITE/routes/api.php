@@ -30,4 +30,5 @@ Route::group([
 ], function () {
     Route::post('/addCompetitor', [CompetitorController::class, 'addCompetitor']);
     Route::delete('/deleteCompetitor', [CompetitorController::class, 'deleteCompetitor']);
+    Route::get('/getCompetitors/{academic_year}', [CompetitorController::class, 'getCompetitors']);
 });
