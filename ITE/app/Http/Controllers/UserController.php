@@ -402,8 +402,8 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/users/showUser",
-     *     summary="show user information",
+     *     path="/users/currentUser",
+     *     summary="current user information",
      *     tags={"Users"},
      *     @OA\Response(
      *      response=200, description="return the user"),
@@ -413,8 +413,32 @@ class UserController extends Controller
      *     }
      * )
      */
-    public function show()
+    public function current()
     {
-        return response()->json(Auth::user());
+        return response()->json(['user' => Auth::user()]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/users/getUser/{name}",
+     *     summary="get user information",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *            name="name",
+     *            in="path",
+     *            required=true,
+     *            description="user name",
+     *            @OA\Schema(
+     *                type="string"
+     *            )
+     *        ),
+     *     @OA\Response(
+     *      response=200, description="return the user"),
+     *     @OA\Response(response=400, description="Invalid request"),
+     * )
+     */
+    public function getUser(string $name)
+    {
+        return response()->json(['user' => $this->userService->findByName($name)]);
     }
 }

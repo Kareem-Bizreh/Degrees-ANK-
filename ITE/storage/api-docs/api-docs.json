@@ -536,13 +536,13 @@
                 ]
             }
         },
-        "/users/showUser": {
+        "/users/currentUser": {
             "get": {
                 "tags": [
                     "Users"
                 ],
-                "summary": "show user information",
-                "operationId": "d1a15178b0ade8cbcac106e1c825fc2a",
+                "summary": "current user information",
+                "operationId": "12aa348bb753c4b5587ac4418fcc7017",
                 "responses": {
                     "200": {
                         "description": "return the user"
@@ -556,6 +556,34 @@
                         "bearer": []
                     }
                 ]
+            }
+        },
+        "/users/getUser/{name}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "get user information",
+                "operationId": "5ff3b5732ae4bf1effb564f72c109eb4",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "user name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return the user"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
             }
         }
     },

@@ -14,13 +14,14 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
     Route::put('/setPassword', [UserController::class, 'setPassword']);
+    Route::get('/getUser/{name}', [UserController::class, 'getUser']);
 
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/logout', [UserController::class, 'logout']);
         Route::put('/resetPassword', [UserController::class, 'resetPassword']);
         Route::put('/editUser', [UserController::class, 'edit']);
-        Route::get('/showUser', [UserController::class, 'show']);
+        Route::get('/currentUser', [UserController::class, 'current']);
     });
 });
 
@@ -31,4 +32,11 @@ Route::group([
     Route::post('/addCompetitor', [CompetitorController::class, 'addCompetitor']);
     Route::delete('/deleteCompetitor', [CompetitorController::class, 'deleteCompetitor']);
     Route::get('/getCompetitors/{academic_year}', [CompetitorController::class, 'getCompetitors']);
+});
+
+Route::group([
+    'prefix' => 'materials',
+    'middleware' => 'auth:api'
+], function () {
+    //
 });
