@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CompetitorController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UserController;
+use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +17,6 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::put('/setPassword', [UserController::class, 'setPassword']);
     Route::get('/getUser/{name}', [UserController::class, 'getUser']);
-
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/logout', [UserController::class, 'logout']);
@@ -34,9 +35,14 @@ Route::group([
     Route::get('/getCompetitors/{academic_year}', [CompetitorController::class, 'getCompetitors']);
 });
 
-Route::group([
-    'prefix' => 'materials',
-    'middleware' => 'auth:api'
-], function () {
-    //
+Route::group(['prefix' => 'materials'], function () {
+
+    Route::put('/editDegree', [MaterialController::class, 'editDegree']);
+    Route::get('/getMaterials/{academic_year}/{specialization}', [MaterialController::class, 'getMaterialsForYearAndSpecialization']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/addDegree', [MaterialController::class, 'addDegree']);
+        Route::get('/getDegree/{material}', [MaterialController::class, 'getDegreeForMaterial']);
+        Route::get('/getDegrees/{academic_year}/{specialization}', [MaterialController::class, 'getDegreesForAcademicYear']);
+    });
 });

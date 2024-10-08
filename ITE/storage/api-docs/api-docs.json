@@ -173,6 +173,261 @@
                 ]
             }
         },
+        "/materials/addDegree": {
+            "post": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "add degree for",
+                "operationId": "20a172ed67f149ad95c5dbf22e84d75d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "material": {
+                                            "type": "string"
+                                        },
+                                        "degree": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "example": [
+                                {
+                                    "material": "الفيزياء",
+                                    "degree": 88
+                                },
+                                {
+                                    "material": "التحليل 1",
+                                    "degree": 75
+                                }
+                            ]
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "degree for material has been added"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/materials/editDegree": {
+            "put": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "edit some degree for material",
+                "operationId": "b9b1a5891f467b423c1636a6e59b0611",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_name",
+                                    "material",
+                                    "degree"
+                                ],
+                                "properties": {
+                                    "user_name": {
+                                        "type": "string",
+                                        "example": "Harry Potter"
+                                    },
+                                    "material": {
+                                        "type": "string",
+                                        "example": "الفيزياء"
+                                    },
+                                    "degree": {
+                                        "type": "integer",
+                                        "example": "90"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully edit of degree",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "degree for material has been changed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/materials/getDegree/{material}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get degree for material",
+                "operationId": "90455faf63924960179fa24dc4249263",
+                "parameters": [
+                    {
+                        "name": "material",
+                        "in": "path",
+                        "description": "material name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "الفيزياء"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "degree": {
+                                            "type": "integer",
+                                            "example": "90"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/materials/getDegrees/{academic_year}/{specialization}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get degrees for specialization in some academic year",
+                "operationId": "9a5fd14c0f6355f8da26723b7a15834f",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "first_year"
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "path",
+                        "description": "specialization",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "مشتركة لكل الاختصاصات"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/materials/getMaterials/{academic_year}/{specialization}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get materials for specialization in some academic year",
+                "operationId": "35ba1540484df6649d178b3d6d043c7d",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "first_year"
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "path",
+                        "description": "specialization",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "مشتركة لكل الاختصاصات"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
         "/users/register": {
             "post": {
                 "tags": [
@@ -542,7 +797,7 @@
                     "Users"
                 ],
                 "summary": "current user information",
-                "operationId": "12aa348bb753c4b5587ac4418fcc7017",
+                "operationId": "b4ef93685e1ef230f74f8b453c55cab5",
                 "responses": {
                     "200": {
                         "description": "return the user"
@@ -591,6 +846,10 @@
         {
             "name": "Competitors",
             "description": "Competitors"
+        },
+        {
+            "name": "Materials",
+            "description": "Materials"
         },
         {
             "name": "Users",

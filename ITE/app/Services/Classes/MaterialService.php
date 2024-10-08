@@ -17,7 +17,7 @@ class MaterialService implements MaterialServiceInterface
      */
     function FindMaterialByName(string $name)
     {
-        return Material::where('name', $name);
+        return Material::where('name', $name)->get()->first();
     }
 
     /**
@@ -29,7 +29,9 @@ class MaterialService implements MaterialServiceInterface
      */
     function add(array $degrees, int $user_id): bool
     {
-        foreach ($degrees as $material => $degree) {
+        foreach ($degrees as $data) {
+            $material = $data['material'];
+            $degree = $data['degree'];
             DB::table('material_student')->insert([
                 'student_id' => $user_id,
                 'material_id' => $this->FindMaterialByName($material)->id,
@@ -44,7 +46,7 @@ class MaterialService implements MaterialServiceInterface
      *
      * @param string $material
      * @param int $degree
-     * @param int $user_id
+     * @param string $user
      * @return bool
      */
     function edit(string $material, int $degree, int $user_id): bool
@@ -71,7 +73,7 @@ class MaterialService implements MaterialServiceInterface
         return DB::table('material_student')
             ->where('material_id', '=', $material_id)
             ->where('student_id', '=', $user_id)
-            ->get()->first();
+            ->get(['degree'])->first();
     }
 
     /**
@@ -104,7 +106,7 @@ class MaterialService implements MaterialServiceInterface
     function getMaterialsForYearAndSpecialization(string $academic_year, string $specialization)
     {
         $materials = Material::where('academic_year', $academic_year)->get();
-        if ($specialization == Specialization::SoftwareEngineeringAndInformationSystems) {
+        if ($specialization == Specialization::SoftwareEngineeringAndInformationSystems->value) {
             $materials = $materials->filter(function ($material) {
                 return
                     $material->specialization == Specialization::SoftwareEngineeringAndInformationSystems->value
@@ -113,7 +115,7 @@ class MaterialService implements MaterialServiceInterface
                     || $material->specialization == Specialization::CommonForAll->value;
             });
         }
-        if ($specialization == Specialization::ArtificialIntelligence) {
+        if ($specialization == Specialization::ArtificialIntelligence->value) {
             $materials = $materials->filter(function ($material) {
                 return
                     $material->specialization == Specialization::ArtificialIntelligence->value
@@ -121,7 +123,7 @@ class MaterialService implements MaterialServiceInterface
                     || $material->specialization == Specialization::CommonForAll->value;
             });
         }
-        if ($specialization == Specialization::ComputerSystemsAndNetworks) {
+        if ($specialization == Specialization::ComputerSystemsAndNetworks->value) {
             $materials = $materials->filter(function ($material) {
                 return
                     $material->specialization == Specialization::ComputerSystemsAndNetworks->value
@@ -129,6 +131,6 @@ class MaterialService implements MaterialServiceInterface
                     || $material->specialization == Specialization::CommonForAll->value;
             });
         }
-        return $materials;
+        return $materials->values();
     }
 }
