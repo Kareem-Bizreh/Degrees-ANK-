@@ -64,13 +64,13 @@
                 ]
             }
         },
-        "/competitors/getCompetitors/{academic_year}": {
+        "/competitors/getCompetitors/{academic_year}/{specialization}": {
             "get": {
                 "tags": [
                     "Competitors"
                 ],
                 "summary": "get competitors order by GBAs in some year",
-                "operationId": "382a4fe804c3bad5792746803b9c178e",
+                "operationId": "5d457f6743a2684de909b05b8a044259",
                 "parameters": [
                     {
                         "name": "academic_year",
@@ -79,7 +79,17 @@
                         "required": true,
                         "schema": {
                             "type": "string"
-                        }
+                        },
+                        "example": "first_year"
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "common"
                     },
                     {
                         "name": "page",
@@ -371,7 +381,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "example": "مشتركة لكل الاختصاصات"
+                        "example": "common"
                     }
                 ],
                 "responses": {
@@ -415,7 +425,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "example": "مشتركة لكل الاختصاصات"
+                        "example": "common"
                     }
                 ],
                 "responses": {

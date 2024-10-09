@@ -63,14 +63,16 @@ class CompetitorService implements CompetitorServiceInterface
      * get my friend in descending order
      *
      * @param string $academic_year
+     * @param string $specialization
      */
-    function getCompetitors(string $academic_year)
+    function getCompetitors(string $academic_year, string $specialization)
     {
         return DB::table('competitors')
             ->join('GBAs', 'GBAs.student_id', '=', 'competitors.friend_id')
             ->join('users', 'users.id', '=', 'competitors.friend_id')
             ->where('competitors.student_id', '=', Auth::id())
             ->where('GBAs.academic_year', $academic_year)
+            ->where('GBAs.specialization', $specialization)
             ->orderBy('GBAs.average', 'DESC')
             ->select('competitors.*', 'GBAs.average', 'users.name as friend_name')
             ->paginate(10);

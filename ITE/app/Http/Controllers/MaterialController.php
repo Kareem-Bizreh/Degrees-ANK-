@@ -203,7 +203,7 @@ class MaterialController extends Controller
      *            @OA\Schema(
      *                type="string"
      *            ),
-     *            example="مشتركة لكل الاختصاصات"
+     *            example="common"
      *        ),
      *        @OA\Response(
      *          response=200, description="Successful"),
@@ -241,7 +241,7 @@ class MaterialController extends Controller
      *            @OA\Schema(
      *                type="string"
      *            ),
-     *            example="مشتركة لكل الاختصاصات"
+     *            example="common"
      *        ),
      *        @OA\Response(
      *          response=200, description="Successful"),

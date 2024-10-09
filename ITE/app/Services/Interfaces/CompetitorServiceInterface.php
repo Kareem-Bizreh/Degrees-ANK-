@@ -24,6 +24,7 @@ interface CompetitorServiceInterface
      * get my friend in descending order
      *
      * @param string $academic_year
+     * @param string $specialization
      */
-    function getCompetitors(string $academic_year);
+    function getCompetitors(string $academic_year, string $specialization);
 }
