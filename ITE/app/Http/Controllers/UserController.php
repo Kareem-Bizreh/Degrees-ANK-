@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AcademicYear;
 use App\Enums\Specialization;
 use App\Services\Classes\UserService;
 use Illuminate\Http\Request;
@@ -350,7 +351,7 @@ class UserController extends Controller
      *             @OA\Property(
      *                 property="specialization",
      *                 type="string",
-     *                 example="ذكاء صنعي"
+     *                 example="AI"
      *             ),
      *         )
      *     ),
@@ -401,16 +402,76 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *     path="/users/setSpecialization",
+     *     summary="set specialization for user in some year",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"specialization", "academic_year", "name"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 example="Harry Potter"
+     *             ),
+     *             @OA\Property(
+     *                 property="specialization",
+     *                 type="string",
+     *                 example="AI"
+     *             ),
+     *             @OA\Property(
+     *                 property="academic_year",
+     *                 type="string",
+     *                 example="fourth_year"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *      response=200, description="Successfully set the specialization",
+     *       @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="updated done"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid request"),
+     *     security={
+     *         {"bearer": {}}
+     *     }
+     * )
+     */
+    function setSpecialization(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'name' => 'required|exists:users,name',
+            'specialization' => ['required', new Enum(Specialization::class)],
+            'academic_year' => ['required', new Enum(AcademicYear::class)]
+        ]);
+
+        if ($data->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $data->errors(),
+            ], 400);
+        }
+        $data = $data->validated();
+
+        $user = $this->userService->setSpecialization($data['academic_year'], $data['name'], $data['specialization']);
+
+        return response()->json(['message' => 'updated done']);
+    }
+
+    /**
      * @OA\Get(
      *     path="/users/currentUser",
      *     summary="current user information",
      *     tags={"Users"},
      *     @OA\Response(
      *      response=200, description="return the user"),
-     *     @OA\Response(response=400, description="Invalid request"),
-     *     security={
-     *         {"bearer": {}}
-     *     }
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function current()
@@ -440,5 +501,42 @@ class UserController extends Controller
     public function getUser(string $name)
     {
         return response()->json(['user' => $this->userService->findByName($name)]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/users/getSpecialization/{academic_year}/{user_name}",
+     *     summary="get user specialization in some year",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *            name="academic_year",
+     *            in="path",
+     *            required=true,
+     *            description="academic year",
+     *            example="fourth_year",
+     *            @OA\Schema(
+     *                type="string"
+     *            )
+     *        ),
+     *     @OA\Parameter(
+     *            name="user_name",
+     *            in="path",
+     *            required=true,
+     *            description="user name",
+     *            example="Harry Potter",
+     *            @OA\Schema(
+     *                type="string"
+     *            )
+     *     ),
+     *     @OA\Response(
+     *      response=200, description="return the users specialization"),
+     *     @OA\Response(response=400, description="Invalid request")
+     * )
+     */
+    public function getSpecialization(string $academic_year, string $user_name)
+    {
+        return response()->json([
+            'specialization' => $this->userService->getSpecialization($academic_year, $user_name)
+        ]);
     }
 }

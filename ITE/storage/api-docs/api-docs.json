@@ -761,7 +761,7 @@
                                     },
                                     "specialization": {
                                         "type": "string",
-                                        "example": "ذكاء صنعي"
+                                        "example": "AI"
                                     }
                                 },
                                 "type": "object"
@@ -801,6 +801,70 @@
                 ]
             }
         },
+        "/users/setSpecialization": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "set specialization for user in some year",
+                "operationId": "a289d7156020bef5e7ac373b9be1156c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "specialization",
+                                    "academic_year",
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Harry Potter"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "example": "AI"
+                                    },
+                                    "academic_year": {
+                                        "type": "string",
+                                        "example": "fourth_year"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully set the specialization",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "updated done"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/users/currentUser": {
             "get": {
                 "tags": [
@@ -815,12 +879,7 @@
                     "400": {
                         "description": "Invalid request"
                     }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
+                }
             }
         },
         "/users/getUser/{name}": {
@@ -844,6 +903,45 @@
                 "responses": {
                     "200": {
                         "description": "return the user"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/users/getSpecialization/{academic_year}/{user_name}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "get user specialization in some year",
+                "operationId": "78a533d34f2bf27e15b4da99094a0bdd",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "fourth_year"
+                    },
+                    {
+                        "name": "user_name",
+                        "in": "path",
+                        "description": "user name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Harry Potter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return the users specialization"
                     },
                     "400": {
                         "description": "Invalid request"

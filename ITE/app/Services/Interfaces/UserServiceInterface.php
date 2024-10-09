@@ -58,4 +58,23 @@ interface UserServiceInterface
      * @param array $data
      */
     public function createToken(array $data);
+
+    /**
+     * set specialization for some year
+     *
+     * @param string $academic_year
+     * @param string $user_name
+     * @param string $specialization
+     * @return bool
+     */
+    function setSpecialization(string $academic_year, string $user_name, string $specialization): bool;
+
+    /**
+     * get specialization in some year
+     *
+     * @param string $academic_year
+     * @param string $user_name
+     * @return string
+     */
+    function getSpecialization(string $academic_year, string $user_name): string;
 }

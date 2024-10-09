@@ -17,6 +17,8 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::put('/setPassword', [UserController::class, 'setPassword']);
     Route::get('/getUser/{name}', [UserController::class, 'getUser']);
+    Route::put('/setSpecialization', [UserController::class, 'setSpecialization']);
+    Route::get('/getSpecialization/{academic_year}/{user_name}', [UserController::class, 'getSpecialization']);
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/logout', [UserController::class, 'logout']);

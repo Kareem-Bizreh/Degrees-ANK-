@@ -2,10 +2,9 @@
 
 namespace App\Services\Classes;
 
-use App\Enums\Specialization;
+use App\Enums\AcademicYear;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
@@ -112,5 +111,40 @@ class UserService implements UserServiceInterface
             'message' => 'user has been login successfuly',
             'Bearer Token' => $token
         ], 200);
+    }
+
+    /**
+     * set specialization for some year
+     *
+     * @param string $academic_year
+     * @param string $user_name
+     * @param string $specialization
+     * @return bool
+     */
+    function setSpecialization(string $academic_year, string $user_name, string $specialization): bool
+    {
+        $user = $this->findByName($user_name);
+        if ($academic_year == AcademicYear::FourthYear->value)
+            $user->specialization_in_fourth = $specialization;
+        elseif ($academic_year == AcademicYear::FifthYear->value)
+            $user->specialization_in_fifth = $specialization;
+        $user->save();
+        return true;
+    }
+
+    /**
+     * get specialization in some year
+     *
+     * @param string $academic_year
+     * @param string $user_name
+     * @return string
+     */
+    function getSpecialization(string $academic_year, string $user_name): string
+    {
+        $user = $this->findByName($user_name);
+        if ($academic_year == AcademicYear::FourthYear->value)
+            return $user->specialization_in_fourth;
+        if ($academic_year == AcademicYear::FifthYear->value)
+            return $user->specialization_in_fifth;
     }
 }
