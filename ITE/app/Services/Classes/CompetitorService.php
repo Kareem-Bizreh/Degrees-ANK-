@@ -116,7 +116,7 @@ class CompetitorService implements CompetitorServiceInterface
             ->where('academic_year', '=', $academic_year)
             ->where('specialization', '=', $specialization)
             ->orderBy('GBAs.average', 'DESC')
-            ->select('GBAs.average', 'users.name as friend_name')
+            ->select('GBAs.average', 'users.name as name')
             ->paginate(10);
     }
 }
