@@ -55,4 +55,15 @@ interface MaterialServiceInterface
      * @param string $specialization
      */
     function getMaterialsForYearAndSpecialization(string $academic_year, string $specialization);
+
+    /**
+     * calculate gba for user in some year or academic year
+     *
+     * @param string $academic_year
+     * @param string $year
+     * @param int $user_id
+     * @param string $specialization
+     * @return bool
+     */
+    function calcGBA(string $academic_year, string $year, int $user_id, string $specialization): bool;
 }

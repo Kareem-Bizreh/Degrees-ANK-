@@ -24,9 +24,9 @@ class UserService implements UserServiceInterface
      * @return User
      * @throws ModelNotFoundException
      */
-    public function findById(int $id): User
+    public function findById(int $id)
     {
-        return User::find($id);
+        return User::findOrFail($id);
     }
 
     /**
@@ -48,19 +48,26 @@ class UserService implements UserServiceInterface
      * @return User
      * @throws ValidationException
      */
-    public function createUser($data): User
+    public function createUser($data)
     {
-        $user = new User;
-        $user->name = $data['name'];
-        $user->first_name = $data['first_name'];
-        $user->last_name = $data['last_name'];
-        $user->entry_year = $data['entry_year'];
-        $user->password = bcrypt($data['password']);
-        $user->save();
-        DB::table('competitors')->insert([
-            'student_id' => $user->id,
-            'friend_id' => $user->id
-        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $data['name'],
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'entry_year' => $data['entry_year'],
+                'password' => bcrypt($data['password']),
+            ]);
+            DB::table('competitors')->insert([
+                'student_id' => $user->id,
+                'friend_id' => $user->id
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
         return $user;
     }
 
@@ -72,11 +79,18 @@ class UserService implements UserServiceInterface
      * @return User
      * @throws ModelNotFoundException
      */
-    public function updateUser(int $id, $data): User
+    public function updateUser(int $id, $data)
     {
-        $user = User::find($id);
-        $user->update($data);
-        $user->save();
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail($id);
+            $user->update($data);
+            $user->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
         return $user;
     }
 
@@ -86,12 +100,21 @@ class UserService implements UserServiceInterface
      * @param int $id
      * @param string $newPassword
      * @throws ModelNotFoundException
+     * @return bool
      */
-    public function changeUserPassword(int $id, string $newPassword)
+    public function changeUserPassword(int $id, string $newPassword): bool
     {
-        $user = $this->findById($id);
-        $user->password = bcrypt($newPassword);
-        $user->save();
+        DB::beginTransaction();
+        try {
+            $user = $this->findById($id);
+            $user->password = bcrypt($newPassword);
+            $user->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -123,12 +146,19 @@ class UserService implements UserServiceInterface
      */
     function setSpecialization(string $academic_year, string $user_name, string $specialization): bool
     {
-        $user = $this->findByName($user_name);
-        if ($academic_year == AcademicYear::FourthYear->value)
-            $user->specialization_in_fourth = $specialization;
-        elseif ($academic_year == AcademicYear::FifthYear->value)
-            $user->specialization_in_fifth = $specialization;
-        $user->save();
+        DB::beginTransaction();
+        try {
+            $user = $this->findByName($user_name);
+            if ($academic_year == AcademicYear::FourthYear->value)
+                $user->specialization_in_fourth = $specialization;
+            elseif ($academic_year == AcademicYear::FifthYear->value)
+                $user->specialization_in_fifth = $specialization;
+            $user->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
         return true;
     }
 

@@ -27,4 +27,13 @@ interface CompetitorServiceInterface
      * @param string $specialization
      */
     function getCompetitors(string $academic_year, string $specialization);
+
+    /**
+     * get all of my class in academic year for some specialization in descending order
+     *
+     * @param string $academic_year
+     * @param string $specialization
+     * @param int $user_id
+     */
+    function getOrderOfMyClass(string $academic_year, string $specialization, int $user_id);
 }

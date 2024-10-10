@@ -35,6 +35,7 @@ Route::group([
     Route::post('/addCompetitor', [CompetitorController::class, 'addCompetitor']);
     Route::delete('/deleteCompetitor', [CompetitorController::class, 'deleteCompetitor']);
     Route::get('/getCompetitors/{academic_year}/{specialization}', [CompetitorController::class, 'getCompetitors']);
+    Route::get('/getOrderOfMyClass/{academic_year}/{specialization}', [CompetitorController::class, 'getOrderOfMyClass']);
 });
 
 Route::group(['prefix' => 'materials'], function () {
@@ -46,5 +47,6 @@ Route::group(['prefix' => 'materials'], function () {
         Route::post('/addDegree', [MaterialController::class, 'addDegree']);
         Route::get('/getDegree/{material}', [MaterialController::class, 'getDegreeForMaterial']);
         Route::get('/getDegrees/{academic_year}/{specialization}', [MaterialController::class, 'getDegreesForAcademicYear']);
+        Route::post('/calcGBA', [MaterialController::class, 'calcGBA']);
     });
 });

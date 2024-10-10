@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AcademicYear;
+use App\Enums\Specialization;
 use App\Services\Classes\MaterialService;
 use App\Services\Classes\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 class MaterialController extends Controller
 {
@@ -81,6 +84,69 @@ class MaterialController extends Controller
         if ($this->materialService->add($request->all(), Auth::id()))
             return response()->json(['message' => 'degree for material has been added'], 200);
         return response()->json(['message' => 'added failed'], 400);
+    }
+
+    /**
+     * @OA\Post(
+     *       path="/materials/calcGBA",
+     *       summary="calculate GBA for current user",
+     *       tags={"Materials"},
+     *        @OA\RequestBody(
+     *           required=true,
+     *           @OA\JsonContent(
+     *               required={"academic_year", "year", "specialization"},
+     *               @OA\Property(
+     *                   property="academic_year",
+     *                   type="string",
+     *                   example="first_year"
+     *               ),
+     *               @OA\Property(
+     *                   property="specialization",
+     *                   type="string",
+     *                   example="common"
+     *               ),
+     *               @OA\Property(
+     *                   property="year",
+     *                   type="string",
+     *                   example="2022"
+     *               ),
+     *           )
+     *        ),
+     *        @OA\Response(
+     *          response=201, description="Successful calculated",
+     *          @OA\JsonContent(
+     *               @OA\Property(
+     *                   property="message",
+     *                   type="string",
+     *                   example="gba calculated seccessfully"
+     *               ),
+     *          )
+     *        ),
+     *        @OA\Response(response=400, description="Invalid request"),
+     *        security={
+     *            {"bearer": {}}
+     *        }
+     * )
+     */
+    function calcGBA(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'academic_year' => ['required', new Enum(AcademicYear::class)],
+            'specialization' => ['required', new Enum(Specialization::class)],
+            'year' => 'required|string'
+        ]);
+
+        if ($data->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $data->errors(),
+            ], 400);
+        }
+        $data = $data->validated();
+
+        if ($this->materialService->calcGBA($data['academic_year'], $data['year'], Auth::id(), $data['specialization']))
+            return response()->json(['message' => 'gba calculated seccessfully']);
+        return response()->json(['message' => 'gba calculated failed']);
     }
 
     /**

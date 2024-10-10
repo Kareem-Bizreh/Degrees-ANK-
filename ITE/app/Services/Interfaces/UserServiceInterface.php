@@ -22,7 +22,7 @@ interface UserServiceInterface
      * @return User
      * @throws ModelNotFoundException
      */
-    public function findById(int $id): User;
+    public function findById(int $id);
 
     /**
      * Create a new user.
@@ -31,7 +31,7 @@ interface UserServiceInterface
      * @return User
      * @throws ValidationException
      */
-    public function createUser($data): User;
+    public function createUser($data);
 
     /**
      * Update user information.
@@ -41,7 +41,7 @@ interface UserServiceInterface
      * @return User
      * @throws ModelNotFoundException
      */
-    public function updateUser(int $id, $data): User;
+    public function updateUser(int $id, $data);
 
     /**
      * Change the user's password.
@@ -49,8 +49,9 @@ interface UserServiceInterface
      * @param int $id
      * @param string $newPassword
      * @throws ModelNotFoundException
+     * @return bool
      */
-    public function changeUserPassword(int $id, string $newPassword);
+    public function changeUserPassword(int $id, string $newPassword): bool;
 
     /**
      * Create token.

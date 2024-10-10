@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\AcademicYear;
 use App\Services\Classes\CompetitorService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
 
@@ -119,6 +120,68 @@ class CompetitorController extends Controller
     function getCompetitors(string $academic_year, string $specialization)
     {
         $competitors = $this->competitorService->getCompetitors($academic_year, $specialization);
+
+        return response()->json([
+            'current_page' => $competitors->currentPage(),
+            'last_page' => $competitors->lastPage(),
+            'per_page' => $competitors->perPage(),
+            'total' => $competitors->total(),
+            'competitors' => $competitors->items()
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *       path="/competitors/getOrderOfMyClass/{academic_year}/{specialization}",
+     *       summary="get competitors order by GBAs in some year",
+     *       tags={"Competitors"},
+     *        @OA\Parameter(
+     *            name="academic_year",
+     *            in="path",
+     *            required=true,
+     *            description="academic year",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="first_year"
+     *        ),
+     *        @OA\Parameter(
+     *            name="specialization",
+     *            in="path",
+     *            required=true,
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="common"
+     *        ),
+     *        @OA\Parameter(
+     *            name="page",
+     *            in="query",
+     *            required=true,
+     *            description="page number",
+     *            @OA\Schema(
+     *                type="integer"
+     *            )
+     *        ),
+     *        @OA\Response(
+     *          response=201, description="Successful get order of my class",
+     *          @OA\JsonContent(
+     *               @OA\Property(
+     *                   property="competitors",
+     *                   type="string",
+     *                   example="[]"
+     *               ),
+     *          )
+     *        ),
+     *        @OA\Response(response=400, description="Invalid request"),
+     *        security={
+     *            {"bearer": {}}
+     *        }
+     * )
+     */
+    function getOrderOfMyClass(string $academic_year, string $specialization)
+    {
+        $competitors = $this->competitorService->getOrderOfMyClass($academic_year, $specialization, Auth::id());
 
         return response()->json([
             'current_page' => $competitors->currentPage(),

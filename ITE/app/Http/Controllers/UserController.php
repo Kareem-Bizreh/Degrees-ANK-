@@ -95,7 +95,9 @@ class UserController extends Controller
         }
         $validateDate = $validateDate->validated();
         $user = $this->userService->createUser($validateDate);
-        return response()->json(['message' => 'user succesfully register'], 200);
+        if ($user)
+            return response()->json(['message' => 'user succesfully register'], 200);
+        return response()->json(['message' => 'user register failed'], 400);
     }
 
     /**
@@ -185,7 +187,13 @@ class UserController extends Controller
      */
     public function logout()
     {
-        Auth::logout();
+        try {
+            Auth::logout();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'user logout failed'
+            ], 400);
+        }
         return response()->json([
             'message' => 'user has been logout successfuly'
         ], 200);
@@ -245,11 +253,13 @@ class UserController extends Controller
         }
         $data = $data->validated();
 
-        $this->userService->changeUserPassword($this->userService->findByName($data['name'])->id, $data['password']);
-
+        if ($this->userService->changeUserPassword($this->userService->findByName($data['name'])->id, $data['password']))
+            return response()->json([
+                'message' => 'new password set'
+            ], 200);
         return response()->json([
-            'message' => 'new password set'
-        ], 200);
+            'message' => 'set password failed'
+        ], 400);
     }
 
     /**
@@ -317,11 +327,13 @@ class UserController extends Controller
             ], 400);
         }
 
-        $this->userService->changeUserPassword($user->id, $data['new_password']);
-
+        if ($this->userService->changeUserPassword($user->id, $data['new_password']))
+            return response()->json([
+                'message' => 'new password set'
+            ], 200);
         return response()->json([
-            'message' => 'new password set'
-        ], 200);
+            'message' => 'set password failed'
+        ], 400);
     }
 
     /**
@@ -347,12 +359,7 @@ class UserController extends Controller
      *                 property="last_name",
      *                 type="string",
      *                 example="Weasly"
-     *             ),
-     *             @OA\Property(
-     *                 property="specialization",
-     *                 type="string",
-     *                 example="AI"
-     *             ),
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -381,8 +388,7 @@ class UserController extends Controller
         $data = Validator::make($request->all(), [
             'name' => 'required|string|max:20',
             'first_name' => 'required|string|max:20',
-            'last_name' => 'required|string|max:20',
-            'specialization' => ['required', new Enum(Specialization::class)]
+            'last_name' => 'required|string|max:20'
         ]);
 
         if ($data->fails()) {
@@ -395,10 +401,12 @@ class UserController extends Controller
 
         $user = $this->userService->updateUser(Auth::id(), $data);
 
-        return response()->json([
-            'message' => 'updated done',
-            'user' => $user
-        ]);
+        if ($user)
+            return response()->json([
+                'message' => 'updated done',
+                'user' => $user
+            ]);
+        return response()->json(['message' => 'updated failed'], 400);
     }
 
     /**
@@ -438,9 +446,6 @@ class UserController extends Controller
      *         )
      *     ),
      *     @OA\Response(response=400, description="Invalid request"),
-     *     security={
-     *         {"bearer": {}}
-     *     }
      * )
      */
     function setSpecialization(Request $request)
@@ -459,9 +464,9 @@ class UserController extends Controller
         }
         $data = $data->validated();
 
-        $user = $this->userService->setSpecialization($data['academic_year'], $data['name'], $data['specialization']);
-
-        return response()->json(['message' => 'updated done']);
+        if ($this->userService->setSpecialization($data['academic_year'], $data['name'], $data['specialization']))
+            return response()->json(['message' => 'updated done']);
+        return response()->json(['message' => 'updated failed'], 400);
     }
 
     /**
@@ -471,7 +476,10 @@ class UserController extends Controller
      *     tags={"Users"},
      *     @OA\Response(
      *      response=200, description="return the user"),
-     *     @OA\Response(response=400, description="Invalid request")
+     *     @OA\Response(response=400, description="Invalid request"),
+     *     security={
+     *         {"bearer": {}}
+     *     }
      * )
      */
     public function current()

@@ -129,6 +129,71 @@
                 ]
             }
         },
+        "/competitors/getOrderOfMyClass/{academic_year}/{specialization}": {
+            "get": {
+                "tags": [
+                    "Competitors"
+                ],
+                "summary": "get competitors order by GBAs in some year",
+                "operationId": "a994e1b4845bb52040c6ed3f68ada2ae",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "first_year"
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "common"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful get order of my class",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "competitors": {
+                                            "type": "string",
+                                            "example": "[]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/competitors/deleteCompetitor": {
             "delete": {
                 "tags": [
@@ -231,6 +296,70 @@
                                         "message": {
                                             "type": "string",
                                             "example": "degree for material has been added"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/materials/calcGBA": {
+            "post": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "calculate GBA for current user",
+                "operationId": "606bb25e12ed3c281730fe0b777aab4f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "academic_year",
+                                    "year",
+                                    "specialization"
+                                ],
+                                "properties": {
+                                    "academic_year": {
+                                        "type": "string",
+                                        "example": "first_year"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "example": "common"
+                                    },
+                                    "year": {
+                                        "type": "string",
+                                        "example": "2022"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful calculated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "gba calculated seccessfully"
                                         }
                                     },
                                     "type": "object"
@@ -758,10 +887,6 @@
                                     "last_name": {
                                         "type": "string",
                                         "example": "Weasly"
-                                    },
-                                    "specialization": {
-                                        "type": "string",
-                                        "example": "AI"
                                     }
                                 },
                                 "type": "object"
@@ -857,12 +982,7 @@
                     "400": {
                         "description": "Invalid request"
                     }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
+                }
             }
         },
         "/users/currentUser": {
@@ -879,7 +999,12 @@
                     "400": {
                         "description": "Invalid request"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
             }
         },
         "/users/getUser/{name}": {
