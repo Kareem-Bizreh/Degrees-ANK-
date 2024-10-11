@@ -470,6 +470,41 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *     path="/users/refreshToken",
+     *     summary="refresh token",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *      response=200, description="return the new token",
+     *      @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="new token set"
+     *             ),
+     *             @OA\Property(
+     *                 property="Bearer Token",
+     *                 type="string",
+     *                 example="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid request"),
+     *     security={
+     *         {"bearer": {}}
+     *     }
+     * )
+     */
+    public function refresh()
+    {
+        $token = Auth::refresh();
+        return response()->json([
+            'message' => 'new token set',
+            'Bearer Token' => $token
+        ], 200);
+    }
+
+    /**
      * @OA\Get(
      *     path="/users/currentUser",
      *     summary="current user information",

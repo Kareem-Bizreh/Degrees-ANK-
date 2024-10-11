@@ -1019,6 +1019,45 @@
                 }
             }
         },
+        "/users/refreshToken": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "refresh token",
+                "operationId": "9477bd120d56b92fe37a0675b684b813",
+                "responses": {
+                    "200": {
+                        "description": "return the new token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "new token set"
+                                        },
+                                        "Bearer Token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/users/currentUser": {
             "get": {
                 "tags": [

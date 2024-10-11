@@ -25,6 +25,7 @@ Route::group(['prefix' => 'users'], function () {
         Route::put('/resetPassword', [UserController::class, 'resetPassword']);
         Route::put('/editUser', [UserController::class, 'edit']);
         Route::get('/currentUser', [UserController::class, 'current']);
+        Route::put('/refreshToken', [UserController::class, 'refresh']);
     });
 });
 
