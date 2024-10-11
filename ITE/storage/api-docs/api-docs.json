@@ -567,6 +567,40 @@
                 }
             }
         },
+        "/materials/getGBA/{academic_year}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get GBA for some academic year",
+                "operationId": "bfa5fb73fa9b937fceddc071db8101fa",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "first_year"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/users/register": {
             "post": {
                 "tags": [

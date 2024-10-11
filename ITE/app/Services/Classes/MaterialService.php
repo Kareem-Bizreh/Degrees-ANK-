@@ -105,7 +105,8 @@ class MaterialService implements MaterialServiceInterface
             $degree = $this->getDegreeForMaterial($material->name, $user_id);
             $data[] = [
                 'material_name' => $material->name,
-                'degree' => $degree->degree
+                'degree' => ($degree ? $degree->degree : null),
+                'semesterNumber' => $material->semesterNumber
             ];
         }
         return $data;
@@ -183,5 +184,19 @@ class MaterialService implements MaterialServiceInterface
             return false;
         }
         return true;
+    }
+
+    /**
+     * get gba of some year to some user
+     *
+     * @param int $user_id
+     * @param string $academic_year
+     */
+    function getGBA(int $user_id, string $academic_year)
+    {
+        return DB::table('GBAs')
+            ->where('student_id', '=', $user_id)
+            ->where('academic_year', '=', $academic_year)
+            ->get()->first();
     }
 }

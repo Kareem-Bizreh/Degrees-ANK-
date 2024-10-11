@@ -318,4 +318,32 @@ class MaterialController extends Controller
     {
         return response()->json($this->materialService->getMaterialsForYearAndSpecialization($academic_year, $specialization));
     }
+
+    /**
+     * @OA\Get(
+     *       path="/materials/getGBA/{academic_year}",
+     *       summary="get GBA for some academic year",
+     *       tags={"Materials"},
+     *       @OA\Parameter(
+     *            name="academic_year",
+     *            in="path",
+     *            required=true,
+     *            description="academic year",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="first_year"
+     *        ),
+     *        @OA\Response(
+     *          response=200, description="Successful"),
+     *        @OA\Response(response=400, description="Invalid request"),
+     *        security={
+     *            {"bearer": {}}
+     *        }
+     * )
+     */
+    function getGBA(string $academic_year)
+    {
+        return response()->json($this->materialService->getGBA(Auth::id(), $academic_year));
+    }
 }

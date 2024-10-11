@@ -66,4 +66,12 @@ interface MaterialServiceInterface
      * @return bool
      */
     function calcGBA(string $academic_year, string $year, int $user_id, string $specialization): bool;
+
+    /**
+     * get gba of some year to some user
+     *
+     * @param int $user_id
+     * @param string $academic_year
+     */
+    function getGBA(int $user_id, string $academic_year);
 }

@@ -47,6 +47,7 @@ Route::group(['prefix' => 'materials'], function () {
         Route::post('/addDegree', [MaterialController::class, 'addDegree']);
         Route::get('/getDegree/{material}', [MaterialController::class, 'getDegreeForMaterial']);
         Route::get('/getDegrees/{academic_year}/{specialization}', [MaterialController::class, 'getDegreesForAcademicYear']);
+        Route::get('/getGBA/{academic_year}', [MaterialController::class, 'getGBA']);
         Route::post('/calcGBA', [MaterialController::class, 'calcGBA']);
     });
 });

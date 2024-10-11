@@ -32,6 +32,7 @@ return new class extends Migration
                 Specialization::ComputerSystemsAndNetworks->value
             ]);
             $table->timestamps();
+            $table->integer('semesterNumber');
         });
     }
 
