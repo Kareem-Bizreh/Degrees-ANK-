@@ -32,18 +32,26 @@ class MaterialService implements MaterialServiceInterface
         DB::beginTransaction();
         try {
             foreach ($degrees as $data) {
-                $material = $data['material'];
+                $material = $this->FindMaterialByName($data['material']);
                 $degree = $data['degree'];
-                DB::table('material_student')->insert([
-                    'student_id' => $user_id,
-                    'material_id' => $this->FindMaterialByName($material)->id,
-                    'degree' => $degree
-                ]);
+                $GBAs = DB::table('material_student')
+                    ->where('student_id', '=', $user_id)
+                    ->where('material_id', '=', $material->id);
+                if (! $GBAs->get()->first())
+                    DB::table('material_student')->insert([
+                        'student_id' => $user_id,
+                        'material_id' => $material->id,
+                        'degree' => $degree
+                    ]);
+                else
+                    $GBAs->update([
+                        'degree' => $degree
+                    ]);
             }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return false;
+            throw $e;
         }
         return true;
     }

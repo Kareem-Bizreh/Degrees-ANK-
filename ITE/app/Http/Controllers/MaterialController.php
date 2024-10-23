@@ -344,6 +344,7 @@ class MaterialController extends Controller
      */
     function getGBA(string $academic_year)
     {
-        return response()->json($this->materialService->getGBA(Auth::id(), $academic_year));
+        $GBA = $this->materialService->getGBA(Auth::id(), $academic_year);
+        return response()->json(['GBA' => $GBA]);
     }
 }
