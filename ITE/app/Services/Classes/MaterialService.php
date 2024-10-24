@@ -51,7 +51,7 @@ class MaterialService implements MaterialServiceInterface
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
+            return false;
         }
         return true;
     }
