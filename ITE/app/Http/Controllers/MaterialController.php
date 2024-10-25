@@ -289,6 +289,32 @@ class MaterialController extends Controller
 
     /**
      * @OA\Get(
+     *       path="/materials/getDegrees/{user_name}",
+     *       summary="get degrees for user",
+     *       tags={"Materials"},
+     *       @OA\Parameter(
+     *            name="user_name",
+     *            in="path",
+     *            required=true,
+     *            description="user name",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="Harry Potter"
+     *        ),
+     *        @OA\Response(
+     *          response=200, description="Successful",@OA\JsonContent()),
+     *        @OA\Response(response=400, description="Invalid request")
+     * )
+     */
+    function getAllDegreesForUser(string $user_name)
+    {
+        $user_id = $this->userService->findByName($user_name)->id;
+        return response()->json($this->materialService->getAllDegreesForUser($user_id));
+    }
+
+    /**
+     * @OA\Get(
      *       path="/materials/getMaterials/{academic_year}/{specialization}",
      *       summary="get materials for specialization in some academic year",
      *       tags={"Materials"},

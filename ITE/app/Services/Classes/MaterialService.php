@@ -219,4 +219,28 @@ class MaterialService implements MaterialServiceInterface
             ->where('academic_year', '=', $academic_year)
             ->get()->first();
     }
+
+    /**
+     * get all degrees for user
+     *
+     * @param int $user_id
+     */
+    function getAllDegreesForUser(int $user_id)
+    {
+        $materials = Material::all();
+        $data = [];
+        foreach ($materials as $material) {
+            $degree = $this->getDegreeForMaterial($material['name'], $user_id);
+            if (!isset($data[$material->academic_year])) {
+                $data[$material->academic_year] = [];
+            }
+            if ($degree)
+                $data[$material->academic_year][] = [
+                    'material_name' => $material->name,
+                    'degree' => $degree->degree,
+                    'semesterNumber' => $material->semesterNumber
+                ];
+        }
+        return $data;
+    }
 }

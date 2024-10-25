@@ -544,6 +544,40 @@
                 ]
             }
         },
+        "/materials/getDegrees/{user_name}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get degrees for user",
+                "operationId": "59a9f8e9e22ac760a89f6e738082e112",
+                "parameters": [
+                    {
+                        "name": "user_name",
+                        "in": "path",
+                        "description": "user name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Harry Potter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
         "/materials/getMaterials/{academic_year}/{specialization}": {
             "get": {
                 "tags": [

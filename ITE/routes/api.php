@@ -43,6 +43,7 @@ Route::group(['prefix' => 'materials'], function () {
 
     Route::put('/editDegree', [MaterialController::class, 'editDegree']);
     Route::get('/getMaterials/{academic_year}/{specialization}', [MaterialController::class, 'getMaterialsForYearAndSpecialization']);
+    Route::get('/getDegrees/{user_name}', [MaterialController::class, 'getAllDegreesForUser']);
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/addDegree', [MaterialController::class, 'addDegree']);

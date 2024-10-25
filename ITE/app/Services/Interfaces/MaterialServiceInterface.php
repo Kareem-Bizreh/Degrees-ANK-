@@ -73,4 +73,11 @@ interface MaterialServiceInterface
      * @param string $academic_year
      */
     function getGBA(int $user_id, string $academic_year);
+
+    /**
+     * get all degrees for user
+     *
+     * @param int $user_id
+     */
+    function getAllDegreesForUser(int $user_id);
 }
