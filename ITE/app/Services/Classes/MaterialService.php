@@ -69,10 +69,17 @@ class MaterialService implements MaterialServiceInterface
         try {
             foreach ($materials as $material) {
                 $material_id = $this->FindMaterialByName($material['material'])->id;
-                DB::table('material_student')
+                $recorde = DB::table('material_student')
                     ->where('material_id', '=', $material_id)
-                    ->where('student_id', '=', $user_id)
-                    ->update([
+                    ->where('student_id', '=', $user_id);
+                if ($recorde->get()->first())
+                    $recorde->update([
+                        'degree' => $material['degree']
+                    ]);
+                else
+                    DB::table('material_student')->insert([
+                        'student_id' => $user_id,
+                        'material_id' => $material_id,
                         'degree' => $material['degree']
                     ]);
             }
