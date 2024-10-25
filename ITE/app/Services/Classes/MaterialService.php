@@ -59,22 +59,23 @@ class MaterialService implements MaterialServiceInterface
     /**
      * edit a degree for material
      *
-     * @param string $material
-     * @param int $degree
+     * @param array $materials
      * @param string $user
      * @return bool
      */
-    function edit(string $material, int $degree, int $user_id): bool
+    function edit(array $materials, int $user_id): bool
     {
         DB::beginTransaction();
         try {
-            $material_id = $this->FindMaterialByName($material)->id;
-            DB::table('material_student')
-                ->where('material_id', '=', $material_id)
-                ->where('student_id', '=', $user_id)
-                ->update([
-                    'degree' => $degree
-                ]);
+            foreach ($materials as $material) {
+                $material_id = $this->FindMaterialByName($material['material'])->id;
+                DB::table('material_student')
+                    ->where('material_id', '=', $material_id)
+                    ->where('student_id', '=', $user_id)
+                    ->update([
+                        'degree' => $material['degree']
+                    ]);
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -171,7 +172,6 @@ class MaterialService implements MaterialServiceInterface
         DB::beginTransaction();
         try {
             $degrees = $this->getDegreesForAcademicYear($academic_year, $user_id, $specialization);
-            $degrees = collect($degrees);
             $recorde = DB::table('GBAs')
                 ->where('student_id', '=', $user_id)
                 ->where('academic_year', '=', $academic_year)
@@ -179,6 +179,11 @@ class MaterialService implements MaterialServiceInterface
                 ->get()->first();
             if ($recorde)
                 return false;
+            foreach ($degrees as $material) {
+                if (! $material['degree'] || $material['degree'] < 60)
+                    return false;
+            }
+            $degrees = collect($degrees);
             DB::table('GBAs')->insert([
                 'student_id' => $user_id,
                 'academic_year' => $academic_year,

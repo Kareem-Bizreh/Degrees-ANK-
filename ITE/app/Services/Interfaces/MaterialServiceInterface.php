@@ -24,12 +24,11 @@ interface MaterialServiceInterface
     /**
      * edit a degree for material
      *
-     * @param string $material
-     * @param int $degree
+     * @param array $materials
      * @param int $user_id
      * @return bool
      */
-    function edit(string $material, int $degree, int $user_id): bool;
+    function edit(array $materials, int $user_id): bool;
 
     /**
      * get a degree for material

@@ -157,21 +157,23 @@ class MaterialController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"user_name", "material", "degree"},
+     *             type="object",
+     *             @OA\Property(property="user_name", type="string", example="Harry Potter"),
      *             @OA\Property(
-     *                  property="user_name",
-     *                  type="string",
-     *                  example="Harry Potter"
-     *             ),
-     *             @OA\Property(
-     *                 property="material",
-     *                 type="string",
-     *                 example="الفيزياء"
-     *             ),
-     *             @OA\Property(
-     *                 property="degree",
-     *                 type="integer",
-     *                 example="90"
+     *                 property="materials",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="material", type="string"),
+     *                     @OA\Property(property="degree", type="integer")
+     *                 ),
+     *                 example={{
+     *             "material": "الفيزياء",
+     *             "degree": 88,
+     *              }, {
+     *             "material": "التحليل 1",
+     *             "degree": 75,
+     *           }}
      *             )
      *         )
      *     ),
@@ -192,8 +194,9 @@ class MaterialController extends Controller
     {
         $data = Validator::make($request->all(), [
             'user_name' => 'required|exists:users,name',
-            'material' => 'required|string|exists:materials,name',
-            'degree' => 'required|integer|min:0|max:100'
+            'materials' => 'required|array',
+            'materials.*.material' => 'required|string|exists:materials,name',
+            'materials.*.degree' => 'required|integer|min:0|max:100'
         ]);
 
         if ($data->fails()) {
@@ -205,7 +208,7 @@ class MaterialController extends Controller
         $data = $data->validated();
 
         $user_id = $this->userService->findByName($data['user_name'])->id;
-        if ($this->materialService->edit($data['material'], $data['degree'], $user_id))
+        if ($this->materialService->edit($data['materials'], $user_id))
             return response()->json(['message' => 'degree for material has been changed'], 200);
         return response()->json(['message' => 'changed failed'], 400);
     }

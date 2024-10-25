@@ -390,23 +390,34 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "user_name",
-                                    "material",
-                                    "degree"
-                                ],
                                 "properties": {
                                     "user_name": {
                                         "type": "string",
                                         "example": "Harry Potter"
                                     },
-                                    "material": {
-                                        "type": "string",
-                                        "example": "الفيزياء"
-                                    },
-                                    "degree": {
-                                        "type": "integer",
-                                        "example": "90"
+                                    "materials": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "material": {
+                                                    "type": "string"
+                                                },
+                                                "degree": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "material": "الفيزياء",
+                                                "degree": 88
+                                            },
+                                            {
+                                                "material": "التحليل 1",
+                                                "degree": 75
+                                            }
+                                        ]
                                     }
                                 },
                                 "type": "object"
