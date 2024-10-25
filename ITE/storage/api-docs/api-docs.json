@@ -526,7 +526,12 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful"
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid request"
@@ -599,7 +604,12 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful"
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid request"
@@ -1078,7 +1088,12 @@
                 "operationId": "b4ef93685e1ef230f74f8b453c55cab5",
                 "responses": {
                     "200": {
-                        "description": "return the user"
+                        "description": "return the user",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid request"

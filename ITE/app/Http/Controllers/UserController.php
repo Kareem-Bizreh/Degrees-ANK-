@@ -510,7 +510,7 @@ class UserController extends Controller
      *     summary="current user information",
      *     tags={"Users"},
      *     @OA\Response(
-     *      response=200, description="return the user"),
+     *      response=200, description="return the user",@OA\JsonContent()),
      *     @OA\Response(response=400, description="Invalid request"),
      *     security={
      *         {"bearer": {}}

@@ -275,7 +275,7 @@ class MaterialController extends Controller
      *            example="common"
      *        ),
      *        @OA\Response(
-     *          response=200, description="Successful"),
+     *          response=200, description="Successful",@OA\JsonContent()),
      *        @OA\Response(response=400, description="Invalid request"),
      *        security={
      *            {"bearer": {}}
@@ -338,7 +338,7 @@ class MaterialController extends Controller
      *            example="first_year"
      *        ),
      *        @OA\Response(
-     *          response=200, description="Successful"),
+     *          response=200, description="Successful",@OA\JsonContent()),
      *        @OA\Response(response=400, description="Invalid request"),
      *        security={
      *            {"bearer": {}}
