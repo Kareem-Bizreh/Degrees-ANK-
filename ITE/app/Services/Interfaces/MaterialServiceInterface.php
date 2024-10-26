@@ -56,6 +56,14 @@ interface MaterialServiceInterface
     function getMaterialsForYearAndSpecialization(string $academic_year, string $specialization);
 
     /**
+     * get materials for some academic year and in a specific specialization for admins
+     *
+     * @param string $academic_year
+     * @param string $specialization
+     */
+    function getMaterialsForYearAndSpecializationForAdmin(string $academic_year, string $specialization);
+
+    /**
      * calculate gba for user in some year or academic year
      *
      * @param string $academic_year

@@ -617,6 +617,45 @@
                 }
             }
         },
+        "/materials/getMaterialsForAdmin/{academic_year}/{specialization}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get materials for specialization in some academic year to help admins",
+                "operationId": "57be55cd03dd872680993f85a132c070",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "first_year"
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "path",
+                        "description": "specialization",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "common"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
         "/materials/getGBA/{academic_year}": {
             "get": {
                 "tags": [
@@ -1161,6 +1200,45 @@
                 "responses": {
                     "200": {
                         "description": "return the user"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/users/getUsers/{first_name}/{last_name}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "get users by full name",
+                "operationId": "3ba6e955677a84374b67d40c5a3c2d93",
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "path",
+                        "description": "user first name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Harry"
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "path",
+                        "description": "user last name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Potter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return list the users"
                     },
                     "400": {
                         "description": "Invalid request"

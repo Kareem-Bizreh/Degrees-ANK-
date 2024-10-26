@@ -548,6 +548,41 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/users/getUsers/{first_name}/{last_name}",
+     *     summary="get users by full name",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *            name="first_name",
+     *            in="path",
+     *            required=true,
+     *            description="user first name",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="Harry"
+     *        ),
+     *     @OA\Parameter(
+     *            name="last_name",
+     *            in="path",
+     *            required=true,
+     *            description="user last name",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="Potter"
+     *        ),
+     *     @OA\Response(
+     *      response=200, description="return list the users"),
+     *     @OA\Response(response=400, description="Invalid request"),
+     * )
+     */
+    public function getUsers(string $first_name, string $last_name)
+    {
+        return response()->json($this->userService->findByFullName($first_name, $last_name));
+    }
+
+    /**
+     * @OA\Get(
      *     path="/users/getSpecialization/{academic_year}/{user_name}",
      *     summary="get user specialization in some year",
      *     tags={"Users"},

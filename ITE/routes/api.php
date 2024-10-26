@@ -17,6 +17,7 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::put('/setPassword', [UserController::class, 'setPassword']);
     Route::get('/getUser/{name}', [UserController::class, 'getUser']);
+    Route::get('/getUsers/{first_name}/{last_name}', [UserController::class, 'getUsers']);
     Route::put('/setSpecialization', [UserController::class, 'setSpecialization']);
     Route::get('/getSpecialization/{academic_year}/{user_name}', [UserController::class, 'getSpecialization']);
 
@@ -43,6 +44,7 @@ Route::group(['prefix' => 'materials'], function () {
 
     Route::put('/editDegree', [MaterialController::class, 'editDegree']);
     Route::get('/getMaterials/{academic_year}/{specialization}', [MaterialController::class, 'getMaterialsForYearAndSpecialization']);
+    Route::get('/getMaterialsForAdmin/{academic_year}/{specialization}', [MaterialController::class, 'getMaterialsForYearAndSpecializationForAdmin']);
     Route::get('/getDegrees/{user_name}', [MaterialController::class, 'getAllDegreesForUser']);
 
     Route::group(['middleware' => 'auth:api'], function () {

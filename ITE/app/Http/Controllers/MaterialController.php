@@ -350,6 +350,41 @@ class MaterialController extends Controller
 
     /**
      * @OA\Get(
+     *       path="/materials/getMaterialsForAdmin/{academic_year}/{specialization}",
+     *       summary="get materials for specialization in some academic year to help admins",
+     *       tags={"Materials"},
+     *       @OA\Parameter(
+     *            name="academic_year",
+     *            in="path",
+     *            required=true,
+     *            description="academic year",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="first_year"
+     *        ),
+     *        @OA\Parameter(
+     *            name="specialization",
+     *            in="path",
+     *            required=true,
+     *            description="specialization",
+     *            @OA\Schema(
+     *                type="string"
+     *            ),
+     *            example="common"
+     *        ),
+     *        @OA\Response(
+     *          response=200, description="Successful"),
+     *        @OA\Response(response=400, description="Invalid request")
+     * )
+     */
+    function getMaterialsForYearAndSpecializationForAdmin(string $academic_year, string $specialization)
+    {
+        return response()->json($this->materialService->getMaterialsForYearAndSpecializationForAdmin($academic_year, $specialization));
+    }
+
+    /**
+     * @OA\Get(
      *       path="/materials/getGBA/{academic_year}",
      *       summary="get GBA for some academic year",
      *       tags={"Materials"},

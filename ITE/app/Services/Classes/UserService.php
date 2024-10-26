@@ -42,6 +42,18 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * find users by full name
+     *
+     * @param string $first_name
+     * @param string $last_name
+     * @throws ModelNotFoundException
+     */
+    public function findByFullName(string $first_name, string $last_name)
+    {
+        return User::where('first_name', $first_name)->where('last_name', $last_name)->get();
+    }
+
+    /**
      * Create a new user.
      *
      * @param $data.

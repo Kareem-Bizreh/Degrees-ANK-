@@ -166,6 +166,27 @@ class MaterialService implements MaterialServiceInterface
     }
 
     /**
+     * get materials for some academic year and in a specific specialization for admins
+     *
+     * @param string $academic_year
+     * @param string $specialization
+     */
+    function getMaterialsForYearAndSpecializationForAdmin(string $academic_year, string $specialization)
+    {
+        $materials = $this->getMaterialsForYearAndSpecialization($academic_year, $specialization);
+
+        $data = [];
+        foreach ($materials as $material) {
+            $data[] = [
+                'material' => $material->name,
+                'degree' => null
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
      * calculate gba for user in some year or academic year
      *
      * @param string $academic_year
