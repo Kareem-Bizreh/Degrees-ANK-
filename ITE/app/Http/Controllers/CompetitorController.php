@@ -121,12 +121,20 @@ class CompetitorController extends Controller
     {
         $competitors = $this->competitorService->getCompetitors($academic_year, $specialization);
 
+        $rankedCompetitors = $competitors->map(function ($competitor, $index) {
+            $competitor->rank = $index + 1;
+            return $competitor;
+        });
+
+        $myRank = $rankedCompetitors->firstWhere('friend_name', Auth::user()->name)->rank;
+
         return response()->json([
+            'my_rank' => $myRank,
             'current_page' => $competitors->currentPage(),
             'last_page' => $competitors->lastPage(),
             'per_page' => $competitors->perPage(),
             'total' => $competitors->total(),
-            'competitors' => $competitors->items()
+            'competitors' => $rankedCompetitors
         ]);
     }
 

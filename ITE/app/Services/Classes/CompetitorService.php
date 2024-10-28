@@ -89,7 +89,12 @@ class CompetitorService implements CompetitorServiceInterface
             ->where('GBAs.academic_year', $academic_year)
             ->where('GBAs.specialization', $specialization)
             ->orderBy('GBAs.average', 'DESC')
-            ->select('competitors.*', 'GBAs.average', 'users.name as friend_name')
+            ->select(
+                'competitors.*',
+                'GBAs.average',
+                'users.name as friend_name',
+                DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name")
+            )
             ->paginate(10);
     }
 
@@ -116,7 +121,11 @@ class CompetitorService implements CompetitorServiceInterface
             ->where('academic_year', '=', $academic_year)
             ->where('specialization', '=', $specialization)
             ->orderBy('GBAs.average', 'DESC')
-            ->select('GBAs.average', 'users.name as name')
+            ->select(
+                'GBAs.average',
+                'users.name as name',
+                DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name")
+            )
             ->paginate(10);
     }
 }
