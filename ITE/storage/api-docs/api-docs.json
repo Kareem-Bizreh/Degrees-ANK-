@@ -129,6 +129,52 @@
                 ]
             }
         },
+        "/competitors/getAllCompetitors": {
+            "get": {
+                "tags": [
+                    "Competitors"
+                ],
+                "summary": "get all competitors and thier GBAs in every year",
+                "operationId": "af7ed14ad396039ee5a714bd152215af",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful get competitors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "competitors": {
+                                            "type": "string",
+                                            "example": "[]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/competitors/getOrderOfMyClass/{academic_year}/{specialization}": {
             "get": {
                 "tags": [

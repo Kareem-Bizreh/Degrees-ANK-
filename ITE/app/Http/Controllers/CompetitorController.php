@@ -140,6 +140,49 @@ class CompetitorController extends Controller
 
     /**
      * @OA\Get(
+     *       path="/competitors/getAllCompetitors",
+     *       summary="get all competitors and thier GBAs in every year",
+     *       tags={"Competitors"},
+     *        @OA\Parameter(
+     *            name="page",
+     *            in="query",
+     *            required=true,
+     *            description="page number",
+     *            @OA\Schema(
+     *                type="integer"
+     *            )
+     *        ),
+     *        @OA\Response(
+     *          response=201, description="Successful get competitors",
+     *          @OA\JsonContent(
+     *               @OA\Property(
+     *                   property="competitors",
+     *                   type="string",
+     *                   example="[]"
+     *               ),
+     *          )
+     *        ),
+     *        @OA\Response(response=400, description="Invalid request"),
+     *        security={
+     *            {"bearer": {}}
+     *        }
+     * )
+     */
+    function getAllCompetitors()
+    {
+        $competitors = $this->competitorService->getAllCompetitors();
+
+        return response()->json([
+            'current_page' => $competitors->currentPage(),
+            'last_page' => $competitors->lastPage(),
+            'per_page' => $competitors->perPage(),
+            'total' => $competitors->total(),
+            'competitors' => $competitors->items()
+        ]);
+    }
+
+    /**
+     * @OA\Get(
      *       path="/competitors/getOrderOfMyClass/{academic_year}/{specialization}",
      *       summary="get competitors order by GBAs in some year",
      *       tags={"Competitors"},

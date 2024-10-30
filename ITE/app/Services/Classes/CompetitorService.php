@@ -99,6 +99,50 @@ class CompetitorService implements CompetitorServiceInterface
     }
 
     /**
+     * get all competitors of user
+     */
+    function getAllCompetitors()
+    {
+        $competitors = DB::table('competitors')
+            ->join('GBAs', 'GBAs.student_id', '=', 'competitors.friend_id')
+            ->join('users', 'users.id', '=', 'competitors.friend_id')
+            ->where('competitors.student_id', '=', Auth::id())
+            ->select(
+                'users.name as friend_name',
+                DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name"),
+                'GBAs.academic_year',
+                'GBAs.average'
+            )
+            ->get();
+        $data = [];
+        foreach ($competitors as $competitor) {
+            if (!isset($data[$competitor->friend_name])) {
+                $data[$competitor->friend_name] = [
+                    'full_name' => $competitor->full_name,
+                    'GBAs' => [
+                        'first_year' => null,
+                        'second_year' => null,
+                        'third_year' => null,
+                        'fourth_year' => null,
+                        'fifth_year' => null
+                    ]
+                ];
+            }
+            $data[$competitor->friend_name]['GBAs'][$competitor->academic_year] = $competitor->average;
+        }
+
+        $data = collect($data);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $offset = ($currentPage - 1) * 10;
+        $currentPageItems = $data->slice($offset, 10);
+        $total = $data->count();
+        $paginatedData = new LengthAwarePaginator($currentPageItems, $total, 10, $currentPage);
+
+        return $paginatedData;
+    }
+
+
+    /**
      * get all of my class in academic year for some specialization in descending order
      *
      * @param string $academic_year

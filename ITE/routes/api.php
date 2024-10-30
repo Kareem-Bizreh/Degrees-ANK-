@@ -37,6 +37,7 @@ Route::group([
     Route::post('/addCompetitor', [CompetitorController::class, 'addCompetitor']);
     Route::delete('/deleteCompetitor', [CompetitorController::class, 'deleteCompetitor']);
     Route::get('/getCompetitors/{academic_year}/{specialization}', [CompetitorController::class, 'getCompetitors']);
+    Route::get('/getAllCompetitors', [CompetitorController::class, 'getAllCompetitors']);
     Route::get('/getOrderOfMyClass/{academic_year}/{specialization}', [CompetitorController::class, 'getOrderOfMyClass']);
 });
 
