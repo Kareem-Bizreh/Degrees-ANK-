@@ -129,6 +129,52 @@
                 ]
             }
         },
+        "/competitors/getAllCompetitors": {
+            "get": {
+                "tags": [
+                    "Competitors"
+                ],
+                "summary": "get all competitors and thier GBAs in every year",
+                "operationId": "af7ed14ad396039ee5a714bd152215af",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful get competitors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "competitors": {
+                                            "type": "string",
+                                            "example": "[]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/competitors/getOrderOfMyClass/{academic_year}/{specialization}": {
             "get": {
                 "tags": [
@@ -390,23 +436,34 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "user_name",
-                                    "material",
-                                    "degree"
-                                ],
                                 "properties": {
                                     "user_name": {
                                         "type": "string",
                                         "example": "Harry Potter"
                                     },
-                                    "material": {
-                                        "type": "string",
-                                        "example": "الفيزياء"
-                                    },
-                                    "degree": {
-                                        "type": "integer",
-                                        "example": "90"
+                                    "materials": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "material": {
+                                                    "type": "string"
+                                                },
+                                                "degree": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "material": "الفيزياء",
+                                                "degree": 88
+                                            },
+                                            {
+                                                "material": "التحليل 1",
+                                                "degree": 75
+                                            }
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -515,7 +572,12 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful"
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid request"
@@ -528,6 +590,40 @@
                 ]
             }
         },
+        "/materials/getDegrees/{user_name}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get degrees for user",
+                "operationId": "59a9f8e9e22ac760a89f6e738082e112",
+                "parameters": [
+                    {
+                        "name": "user_name",
+                        "in": "path",
+                        "description": "user name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Harry Potter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
         "/materials/getMaterials/{academic_year}/{specialization}": {
             "get": {
                 "tags": [
@@ -535,6 +631,45 @@
                 ],
                 "summary": "get materials for specialization in some academic year",
                 "operationId": "35ba1540484df6649d178b3d6d043c7d",
+                "parameters": [
+                    {
+                        "name": "academic_year",
+                        "in": "path",
+                        "description": "academic year",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "first_year"
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "path",
+                        "description": "specialization",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "common"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/materials/getMaterialsForAdmin/{academic_year}/{specialization}": {
+            "get": {
+                "tags": [
+                    "Materials"
+                ],
+                "summary": "get materials for specialization in some academic year to help admins",
+                "operationId": "57be55cd03dd872680993f85a132c070",
                 "parameters": [
                     {
                         "name": "academic_year",
@@ -588,7 +723,12 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful"
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid request"
@@ -1067,7 +1207,12 @@
                 "operationId": "b4ef93685e1ef230f74f8b453c55cab5",
                 "responses": {
                     "200": {
-                        "description": "return the user"
+                        "description": "return the user",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid request"
@@ -1101,6 +1246,45 @@
                 "responses": {
                     "200": {
                         "description": "return the user"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/users/getUsers/{first_name}/{last_name}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "get users by full name",
+                "operationId": "3ba6e955677a84374b67d40c5a3c2d93",
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "path",
+                        "description": "user first name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Harry"
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "path",
+                        "description": "user last name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Potter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return list the users"
                     },
                     "400": {
                         "description": "Invalid request"

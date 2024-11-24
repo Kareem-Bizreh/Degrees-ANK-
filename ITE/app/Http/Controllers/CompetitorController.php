@@ -121,6 +121,57 @@ class CompetitorController extends Controller
     {
         $competitors = $this->competitorService->getCompetitors($academic_year, $specialization);
 
+        $rankedCompetitors = $competitors->map(function ($competitor, $index) {
+            $competitor->rank = $index + 1;
+            return $competitor;
+        });
+
+        $myRank = $rankedCompetitors->firstWhere('friend_name', Auth::user()->name)->rank;
+
+        return response()->json([
+            'my_rank' => $myRank,
+            'current_page' => $competitors->currentPage(),
+            'last_page' => $competitors->lastPage(),
+            'per_page' => $competitors->perPage(),
+            'total' => $competitors->total(),
+            'competitors' => $rankedCompetitors
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *       path="/competitors/getAllCompetitors",
+     *       summary="get all competitors and thier GBAs in every year",
+     *       tags={"Competitors"},
+     *        @OA\Parameter(
+     *            name="page",
+     *            in="query",
+     *            required=true,
+     *            description="page number",
+     *            @OA\Schema(
+     *                type="integer"
+     *            )
+     *        ),
+     *        @OA\Response(
+     *          response=201, description="Successful get competitors",
+     *          @OA\JsonContent(
+     *               @OA\Property(
+     *                   property="competitors",
+     *                   type="string",
+     *                   example="[]"
+     *               ),
+     *          )
+     *        ),
+     *        @OA\Response(response=400, description="Invalid request"),
+     *        security={
+     *            {"bearer": {}}
+     *        }
+     * )
+     */
+    function getAllCompetitors()
+    {
+        $competitors = $this->competitorService->getAllCompetitors();
+
         return response()->json([
             'current_page' => $competitors->currentPage(),
             'last_page' => $competitors->lastPage(),
@@ -183,12 +234,20 @@ class CompetitorController extends Controller
     {
         $competitors = $this->competitorService->getOrderOfMyClass($academic_year, $specialization, Auth::id());
 
+        $rankedCompetitors = $competitors->map(function ($competitor, $index) {
+            $competitor->rank = $index + 1;
+            return $competitor;
+        });
+
+        $myRank = $rankedCompetitors->firstWhere('name', Auth::user()->name)->rank;
+
         return response()->json([
+            'my_rank' => $myRank,
             'current_page' => $competitors->currentPage(),
             'last_page' => $competitors->lastPage(),
             'per_page' => $competitors->perPage(),
             'total' => $competitors->total(),
-            'competitors' => $competitors->items()
+            'competitors' => $rankedCompetitors
         ]);
     }
 

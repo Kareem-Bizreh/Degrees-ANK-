@@ -24,12 +24,11 @@ interface MaterialServiceInterface
     /**
      * edit a degree for material
      *
-     * @param string $material
-     * @param int $degree
+     * @param array $materials
      * @param int $user_id
      * @return bool
      */
-    function edit(string $material, int $degree, int $user_id): bool;
+    function edit(array $materials, int $user_id): bool;
 
     /**
      * get a degree for material
@@ -57,6 +56,14 @@ interface MaterialServiceInterface
     function getMaterialsForYearAndSpecialization(string $academic_year, string $specialization);
 
     /**
+     * get materials for some academic year and in a specific specialization for admins
+     *
+     * @param string $academic_year
+     * @param string $specialization
+     */
+    function getMaterialsForYearAndSpecializationForAdmin(string $academic_year, string $specialization);
+
+    /**
      * calculate gba for user in some year or academic year
      *
      * @param string $academic_year
@@ -74,4 +81,11 @@ interface MaterialServiceInterface
      * @param string $academic_year
      */
     function getGBA(int $user_id, string $academic_year);
+
+    /**
+     * get all degrees for user
+     *
+     * @param int $user_id
+     */
+    function getAllDegreesForUser(int $user_id);
 }

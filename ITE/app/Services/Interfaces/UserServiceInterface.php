@@ -78,4 +78,13 @@ interface UserServiceInterface
      * @return string
      */
     function getSpecialization(string $academic_year, string $user_name): string;
+
+    /**
+     * find users by full name
+     *
+     * @param string $first_name
+     * @param string $last_name
+     * @throws ModelNotFoundException
+     */
+    public function findByFullName(string $first_name, string $last_name);
 }

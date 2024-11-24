@@ -32,13 +32,21 @@ class MaterialService implements MaterialServiceInterface
         DB::beginTransaction();
         try {
             foreach ($degrees as $data) {
-                $material = $data['material'];
+                $material = $this->FindMaterialByName($data['material']);
                 $degree = $data['degree'];
-                DB::table('material_student')->insert([
-                    'student_id' => $user_id,
-                    'material_id' => $this->FindMaterialByName($material)->id,
-                    'degree' => $degree
-                ]);
+                $GBAs = DB::table('material_student')
+                    ->where('student_id', '=', $user_id)
+                    ->where('material_id', '=', $material->id);
+                if (! $GBAs->get()->first())
+                    DB::table('material_student')->insert([
+                        'student_id' => $user_id,
+                        'material_id' => $material->id,
+                        'degree' => $degree
+                    ]);
+                else
+                    $GBAs->update([
+                        'degree' => $degree
+                    ]);
             }
             DB::commit();
         } catch (\Exception $e) {
@@ -51,22 +59,30 @@ class MaterialService implements MaterialServiceInterface
     /**
      * edit a degree for material
      *
-     * @param string $material
-     * @param int $degree
+     * @param array $materials
      * @param string $user
      * @return bool
      */
-    function edit(string $material, int $degree, int $user_id): bool
+    function edit(array $materials, int $user_id): bool
     {
         DB::beginTransaction();
         try {
-            $material_id = $this->FindMaterialByName($material)->id;
-            DB::table('material_student')
-                ->where('material_id', '=', $material_id)
-                ->where('student_id', '=', $user_id)
-                ->update([
-                    'degree' => $degree
-                ]);
+            foreach ($materials as $material) {
+                $material_id = $this->FindMaterialByName($material['material'])->id;
+                $recorde = DB::table('material_student')
+                    ->where('material_id', '=', $material_id)
+                    ->where('student_id', '=', $user_id);
+                if ($recorde->get()->first())
+                    $recorde->update([
+                        'degree' => $material['degree']
+                    ]);
+                else
+                    DB::table('material_student')->insert([
+                        'student_id' => $user_id,
+                        'material_id' => $material_id,
+                        'degree' => $material['degree']
+                    ]);
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -150,6 +166,27 @@ class MaterialService implements MaterialServiceInterface
     }
 
     /**
+     * get materials for some academic year and in a specific specialization for admins
+     *
+     * @param string $academic_year
+     * @param string $specialization
+     */
+    function getMaterialsForYearAndSpecializationForAdmin(string $academic_year, string $specialization)
+    {
+        $materials = $this->getMaterialsForYearAndSpecialization($academic_year, $specialization);
+
+        $data = [];
+        foreach ($materials as $material) {
+            $data[] = [
+                'material' => $material->name,
+                'degree' => null
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
      * calculate gba for user in some year or academic year
      *
      * @param string $academic_year
@@ -163,7 +200,6 @@ class MaterialService implements MaterialServiceInterface
         DB::beginTransaction();
         try {
             $degrees = $this->getDegreesForAcademicYear($academic_year, $user_id, $specialization);
-            $degrees = collect($degrees);
             $recorde = DB::table('GBAs')
                 ->where('student_id', '=', $user_id)
                 ->where('academic_year', '=', $academic_year)
@@ -171,6 +207,11 @@ class MaterialService implements MaterialServiceInterface
                 ->get()->first();
             if ($recorde)
                 return false;
+            foreach ($degrees as $material) {
+                if (! $material['degree'] || $material['degree'] < 60)
+                    return false;
+            }
+            $degrees = collect($degrees);
             DB::table('GBAs')->insert([
                 'student_id' => $user_id,
                 'academic_year' => $academic_year,
@@ -198,5 +239,29 @@ class MaterialService implements MaterialServiceInterface
             ->where('student_id', '=', $user_id)
             ->where('academic_year', '=', $academic_year)
             ->get()->first();
+    }
+
+    /**
+     * get all degrees for user
+     *
+     * @param int $user_id
+     */
+    function getAllDegreesForUser(int $user_id)
+    {
+        $materials = Material::all();
+        $data = [];
+        foreach ($materials as $material) {
+            $degree = $this->getDegreeForMaterial($material['name'], $user_id);
+            if (!isset($data[$material->academic_year])) {
+                $data[$material->academic_year] = [];
+            }
+            if ($degree)
+                $data[$material->academic_year][] = [
+                    'material_name' => $material->name,
+                    'degree' => $degree->degree,
+                    'semesterNumber' => $material->semesterNumber
+                ];
+        }
+        return $data;
     }
 }
